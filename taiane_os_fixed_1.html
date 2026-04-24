@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAIANE OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--bg2:#111111;--bg3:#1a1a1a;--gold:#D4AF37;--gold2:#f0cc55;--green:#2ECC71;--red:#e74c3c;--text:#e8e8e8;--muted:#888;--border:#2a2a2a}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;line-height:1.6;min-height:100vh}
+h1,h2,h3{font-family:'Playfair Display',serif}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+.nav{display:flex;gap:6px;flex-wrap:wrap;background:var(--bg2);padding:8px 16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+.nav a{color:var(--muted);text-decoration:none;font-size:11px;font-weight:500;padding:4px 8px;border-radius:4px;transition:.2s}
+.nav a:hover{color:var(--gold)}
+.container{max-width:1400px;margin:0 auto;padding:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;margin-bottom:16px}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent)}
+.card-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--gold);margin-bottom:14px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;transition:.2s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),#b8960f);color:#000}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-green{background:var(--green);color:#000}
+.btn-sm{padding:5px 10px;font-size:12px}
+input,select,textarea{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 12px;font-family:'Inter',sans-serif;font-size:13px;width:100%;transition:.2s;margin-bottom:8px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold)}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:4px}
+.mode-toggle{display:flex;background:var(--bg3);border-radius:10px;padding:4px;gap:4px;margin-bottom:16px}
+.mode-btn{flex:1;padding:8px;text-align:center;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;transition:.3s;border:none;font-family:'Inter',sans-serif;color:var(--muted);background:transparent}
+.mode-btn.active{background:var(--gold);color:#000}
+.progress-wrap{background:var(--bg3);border-radius:100px;height:8px;overflow:hidden;margin:8px 0}
+.progress-fill{height:100%;border-radius:100px;transition:.6s;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+.progress-fill.green{background:linear-gradient(90deg,var(--green),#27ae60)}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+.check-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:8px;cursor:pointer}
+.check-item.done{opacity:.5;border-color:var(--green)}
+.check-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}
+.workout-item{display:flex;justify-content:space-between;padding:8px 12px;border-radius:8px;background:var(--bg3);margin-bottom:6px;font-size:13px}
+.workout-item span:last-child{color:var(--gold);font-weight:500}
+.meal-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--bg3);border-radius:8px;margin-bottom:6px}
+.meal-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px}
+.meal-del:hover{color:var(--red)}
+.payment-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.payment-card.alert{border-color:rgba(231,76,60,.4)}
+.news-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.news-source{font-size:11px;color:var(--gold);font-weight:500}
+.news-title a{color:var(--text);text-decoration:none;font-size:13px}
+.news-title a:hover{color:var(--gold)}
+.news-date{font-size:11px;color:var(--muted)}
+.appt-card{background:var(--bg3);border-radius:10px;padding:14px;margin-bottom:8px;border-left:3px solid var(--gold)}
+.appt-name{font-weight:600;font-size:14px}
+.appt-times{font-size:12px;color:var(--muted);margin-top:4px}
+.section{padding:20px 0}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.section-num{width:28px;height:28px;background:linear-gradient(135deg,var(--gold),#b8960f);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000}
+.section-title{font-family:'Playfair Display',serif;font-size:22px}
+.water-glasses{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.glass{width:44px;height:56px;border:2px solid var(--border);border-radius:4px 4px 8px 8px;cursor:pointer;transition:.3s;background:transparent;position:relative;overflow:hidden}
+.glass.filled{border-color:var(--gold)}
+.glass.filled::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70%;background:rgba(212,175,55,.4)}
+.pill{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.pill-gold{background:rgba(212,175,55,.15);color:var(--gold);border:1px solid rgba(212,175,55,.3)}
+.pill-green{background:rgba(46,204,113,.15);color:var(--green);border:1px solid rgba(46,204,113,.3)}
+.quote-block{border-left:3px solid var(--gold);padding-left:16px;margin:12px 0}
+.quote-text{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;line-height:1.6}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--gold);border-radius:10px;padding:12px 20px;font-size:13px;z-index:9999;opacity:0;transform:translateY(20px);transition:.3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border)}
+.tab{padding:8px 16px;cursor:pointer;font-size:13px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:.2s}
+.tab.active{color:var(--gold);border-color:var(--gold)}
+.cat-egg{position:fixed;bottom:12px;left:12px;font-size:18px;cursor:pointer;opacity:.3;transition:.3s;z-index:50}
+.cat-egg:hover{opacity:1;transform:scale(1.3)}
+hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="cat-egg" onclick="catEgg()">🐱</div>
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<div style="background:linear-gradient(135deg,#0d0d0d,#1a1500);border-bottom:1px solid rgba(212,175,55,.2);padding:20px 0">
+  <div style="max-width:1400px;margin:0 auto;padding:0 16px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:16px">
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;background:linear-gradient(135deg,#D4AF37,#f0cc55);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px">TAIANE OS</div>
+      <div style="color:var(--muted);font-size:11px;letter-spacing:2px;text-transform:uppercase">Building the life I deserve</div>
+    </div>
+    <div style="text-align:center">
+      <div style="font-family:'Playfair Display',serif;font-size:42px;font-weight:600;color:var(--gold);letter-spacing:2px" id="clock">--:--:--</div>
+      <div style="color:var(--muted);font-size:12px;margin-top:2px" id="dateLine">Loading...</div>
+      <div style="font-size:11px;color:var(--muted)">🕌 Dubai Time (GMT+4)</div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-size:22px;font-weight:500" id="weatherMain">🌤️ Dubai</div>
+      <div style="font-size:11px;color:var(--muted)" id="weatherSub">Loading weather...</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="#philosophy">📚 Philosophy</a>
+  <a href="#flightmode">✈️ Flight Mode</a>
+  <a href="#appointments">🗓️ Appointments</a>
+  <a href="#fitness">💪 Fitness</a>
+  <a href="#finance">💰 Finance</a>
+  <a href="#checklist">✅ Checklist</a>
+  <a href="#ai">🤖 AI Hub</a>
+  <a href="#roster">📋 Roster</a>
+</nav>
+
+<div class="container">
+
+<!-- PHILOSOPHY -->
+<div class="section" id="philosophy">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <div class="section-title">Faculdade de Filosofia</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Today's Philosopher <span id="philDay" style="font-size:13px;color:var(--muted);font-family:Inter"></span></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <div style="font-size:40px" id="philEmoji">🏛️</div>
+        <div>
+          <div style="font-size:18px;font-weight:600;font-family:'Playfair Display',serif" id="philName">Loading...</div>
+          <div style="font-size:12px;color:var(--muted)" id="philEra"></div>
+        </div>
+      </div>
+      <div class="quote-block">
+        <div class="quote-text" id="philQuote" style="color:var(--text)"></div>
+      </div>
+      <div style="margin-top:14px;padding:12px;background:var(--bg3);border-radius:8px">
+        <div style="font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Lesson of the Day</div>
+        <div style="font-size:13px;line-height:1.6" id="philLesson"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Philosophy Journey <span id="philWeek" style="font-size:13px;color:var(--muted);font-family:Inter"></span></div>
+      <label>Topics studied today</label>
+      <input type="text" id="philTopic" placeholder="e.g. Stoic resilience, Existentialism...">
+      <button class="btn btn-gold btn-sm" onclick="addPhilTopic()">+ Add Topic</button>
+      <div style="margin-top:14px" id="philTopicList"></div>
+      <hr>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">This week's progress</div>
+      <div class="progress-wrap"><div class="progress-fill" id="philProgressFill" style="width:0%"></div></div>
+      <div class="progress-label"><span id="philTopicCount">0 topics logged</span><span>7 days</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FLIGHT MODE -->
+<div class="section" id="flightmode">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <div class="section-title">Flight Mode</div>
+  </div>
+  <div class="card">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="dubaiModeBtn" onclick="setMode('dubai')">🏙️ Dubai Mode</button>
+      <button class="mode-btn" id="layoverModeBtn" onclick="setMode('layover')">✈️ Layover Mode</button>
+    </div>
+    <div id="dubaiModeContent">
+      <div style="text-align:center;padding:8px 0 14px;color:var(--muted);font-size:13px">You're home. Full strength training today. 💪</div>
+      <div class="grid2">
+        <div>
+          <div style="font-size:12px;color:var(--gold);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">Full Strength Workout</div>
+          <div class="workout-item"><span>🔥 Warm-up</span><span>5 min</span></div>
+          <div class="workout-item"><span>🦵 Squats</span><span>4 × 12</span></div>
+          <div class="workout-item"><span>🍑 Hip Thrust</span><span>4 × 15</span></div>
+          <div class="workout-item"><span>💪 Lat Pulldown</span><span>4 × 12</span></div>
+          <div class="workout-item"><span>🏋️ Shoulder Press</span><span>3 × 12</span></div>
+          <div class="workout-item"><span>🦵 Romanian Deadlift</span><span>4 × 12</span></div>
+          <div class="workout-item"><span>🧘 Plank</span><span>3 × 45 sec</span></div>
+          <div class="workout-item"><span>❄️ Cool Down</span><span>5 min</span></div>
+        </div>
+        <div>
+          <label>Workout notes for today</label>
+          <textarea id="workoutNotes" rows="4" placeholder="PRs, feelings, progress..." style="resize:none"></textarea>
+          <button class="btn btn-outline btn-sm" onclick="saveWorkoutNotes()">Save Notes</button>
+        </div>
+      </div>
+    </div>
+    <div id="layoverModeContent" style="display:none">
+      <div class="grid2">
+        <div>
+          <label>Destination City</label>
+          <select id="layoverCity">
+            <option value="">Select city...</option>
+            <option>Bangkok</option><option>Ho Chi Minh City</option><option>Rome</option>
+            <option>Amsterdam</option><option>London</option><option>Beijing</option>
+            <option>Dallas</option><option>Miami</option><option>Houston</option>
+            <option>Stockholm</option><option>Prague</option><option>Phuket</option><option>Christchurch</option>
+          </select>
+          <label>Arrival (Dubai time)</label>
+          <input type="time" id="layoverArrival">
+          <label>Layover Duration (hours)</label>
+          <input type="number" id="layoverDuration" placeholder="24">
+          <label>Return Flight (Dubai time)</label>
+          <input type="time" id="layoverReturn">
+          <button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="generateLayoverPlan()">Generate Layover Plan ✈️</button>
+        </div>
+        <div id="layoverPlanContent" style="display:none">
+          <div id="layoverTimezoneInfo" style="background:var(--bg3);border-radius:10px;padding:14px;font-size:13px;line-height:1.8;margin-bottom:12px"></div>
+          <div id="jetlagContent"></div>
+        </div>
+      </div>
+      <div id="cityGuideWrap" style="display:none;margin-top:16px">
+        <div style="font-size:12px;color:var(--gold);font-weight:600;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px" id="cityGuideTitle"></div>
+        <div id="cityGuideContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPOINTMENTS -->
+<div class="section" id="appointments">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <div class="section-title">Appointments & Time Zones</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">Add Appointment</div>
+      <label>Appointment Name</label>
+      <input type="text" id="apptName" placeholder="e.g. Barbara Therapy">
+      <label>Dubai Time</label>
+      <input type="time" id="apptTime">
+      <label>Date (optional)</label>
+      <input type="date" id="apptDate">
+      <label>Recurring</label>
+      <select id="apptRecurring">
+        <option value="no">No</option>
+        <option value="weekly">Weekly</option>
+        <option value="biweekly">Bi-weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+      <button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="addAppointment()">Add Appointment</button>
+    </div>
+    <div class="card">
+      <div class="card-title">Scheduled <span style="font-size:13px;color:var(--muted);font-family:Inter">· multi-timezone display</span></div>
+      <div id="apptList"><div style="color:var(--muted);font-size:13px">No appointments yet.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FITNESS -->
+<div class="section" id="fitness">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <div class="section-title">Body & Fitness</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">🍽️ Calorie Tracker</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <input type="text" id="mealName" placeholder="Meal name">
+        <input type="number" id="mealCal" placeholder="kcal">
+        <input type="number" id="mealProtein" placeholder="protein g">
+      </div>
+      <button class="btn btn-gold btn-sm" onclick="addMeal()">+ Add Meal</button>
+      <div style="margin-top:12px" id="mealList"></div>
+      <hr>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px">
+        <span>Calories: <strong id="calTotal" style="color:var(--gold)">0</strong> / 1700 kcal</span>
+        <span>Protein: <strong id="protTotal" style="color:var(--green)">0</strong>g / 120g</span>
+      </div>
+      <div class="progress-wrap"><div class="progress-fill" id="calBar" style="width:0%"></div></div>
+      <div class="progress-wrap"><div class="progress-fill green" id="protBar" style="width:0%"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">😴 Sleep Tracker</div>
+      <label>Hours slept</label>
+      <input type="number" id="sleepHours" placeholder="7.5" min="0" max="24" step="0.5" onchange="saveSleep()">
+      <label style="margin-top:8px">Quality</label>
+      <div style="display:flex;gap:8px;margin:8px 0" id="sleepStars">
+        <span style="font-size:24px;cursor:pointer;opacity:.4" onclick="setSleepQuality(1)">⭐</span>
+        <span style="font-size:24px;cursor:pointer;opacity:.4" onclick="setSleepQuality(2)">⭐</span>
+        <span style="font-size:24px;cursor:pointer;opacity:.4" onclick="setSleepQuality(3)">⭐</span>
+        <span style="font-size:24px;cursor:pointer;opacity:.4" onclick="setSleepQuality(4)">⭐</span>
+        <span style="font-size:24px;cursor:pointer;opacity:.4" onclick="setSleepQuality(5)">⭐</span>
+      </div>
+      <div id="sleepTip" style="font-size:12px;color:var(--muted);padding:10px;background:var(--bg3);border-radius:8px;margin-top:8px">Log your sleep to get a personalized jet lag tip.</div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">⚖️ Weight Progress</div>
+      <label>Current weight (kg)</label>
+      <input type="number" id="weightInput" value="62" step="0.1" onchange="updateWeight()">
+      <div style="margin-top:12px;font-size:13px;color:var(--muted)">Goal: 59 kg by Aug 2026</div>
+      <div class="progress-wrap" style="margin-top:8px"><div class="progress-fill green" id="weightBar" style="width:0%"></div></div>
+      <div class="progress-label"><span id="weightCurrent">62 kg current</span><span>59 kg goal</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">📸 Progress Photos</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px" id="photoReminder">Take your first check-in photo today!</div>
+      <input type="file" id="photoUpload" accept="image/*" style="display:none" onchange="uploadPhoto(this)">
+      <button class="btn btn-gold" onclick="document.getElementById('photoUpload').click()">📷 Upload Photo</button>
+      <div id="photoGrid" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FINANCE -->
+<div class="section" id="finance">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <div class="section-title">Finance Snapshot</div>
+  </div>
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:4px">Monthly Salary</div>
+        <div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--gold)">AED 10,795</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px">Base fixed</div>
+        <label style="margin-top:12px">Variable Income (AED)</label>
+        <input type="number" id="variableIncome" placeholder="0" onchange="updateSalary()">
+        <div style="font-size:13px;margin-top:4px">Total: <strong id="totalSalary" style="color:var(--gold)">AED 10,795</strong></div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Emergency Reserve</div>
+        <label>Current amount (AED)</label>
+        <input type="number" id="emergencyAmt" placeholder="0" onchange="updateEmergency()">
+        <div class="progress-wrap"><div class="progress-fill green" id="emergencyBar" style="width:0%"></div></div>
+        <div class="progress-label"><span id="emergencyLabel">AED 0 saved</span><span>AED 15,000 goal</span></div>
+      </div>
+    </div>
+    <hr>
+    <div class="card-title" style="margin-top:8px">📅 Upcoming Payments</div>
+    <div id="paymentList"></div>
+  </div>
+</div>
+
+<!-- CHECKLIST -->
+<div class="section" id="checklist">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <div class="section-title">Daily Checklist</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">💧 Hydration</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Goal: 2.5L — tap each glass when drunk</div>
+      <div class="water-glasses" id="waterGlasses"></div>
+      <div style="font-size:13px;margin-top:8px"><strong id="waterCount" style="color:var(--gold)">0</strong>/5 glasses · <span id="waterML">0</span>ml</div>
+      <hr>
+      <div class="card-title" style="margin-top:8px">💊 Supplements</div>
+      <div id="supplementList"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">✅ Daily Goals</div>
+      <div id="checklistItems"></div>
+      <hr>
+      <div class="card-title">🛵 Delivery Tracker (Month)</div>
+      <div id="deliveryStatus"></div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <input type="number" id="deliveryAdd" placeholder="AED amount" style="flex:1">
+        <button class="btn btn-outline btn-sm" onclick="addDelivery()">Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI HUB -->
+<div class="section" id="ai">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <div class="section-title">AI Learning Hub</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📰 Daily AI News</div>
+      <div class="tabs">
+        <div class="tab active" onclick="switchNewsTab('mit',this)">MIT Tech Review</div>
+        <div class="tab" onclick="switchNewsTab('verge',this)">The Verge AI</div>
+        <div class="tab" onclick="switchNewsTab('hf',this)">HuggingFace</div>
+      </div>
+      <div id="newsFeed"><div style="color:var(--muted)">Loading news...</div></div>
+      <button class="btn btn-outline btn-sm" style="margin-top:12px" onclick="loadNews()">🔄 Refresh</button>
+    </div>
+    <div class="card">
+      <div class="card-title">📖 Article of the Day</div>
+      <div style="background:linear-gradient(135deg,rgba(212,175,55,.08),rgba(212,175,55,.02));border:1px solid rgba(212,175,55,.2);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Today's Learning Resource</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:8px" id="aodTitle"></div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px" id="aodSource"></div>
+        <a id="aodLink" href="#" target="_blank" class="btn btn-gold btn-sm">Read Article →</a>
+      </div>
+      <div class="card-title">🔥 Learning Streak</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg3);border-radius:10px;margin-bottom:12px">
+        <div style="font-family:'Playfair Display',serif;font-size:40px;color:var(--gold);line-height:1" id="streakNum">0</div>
+        <div>
+          <div style="font-weight:500">days in a row</div>
+          <div style="font-size:12px;color:var(--muted)" id="streakDate">Start today!</div>
+        </div>
+      </div>
+      <button class="btn btn-green" style="width:100%;margin-bottom:12px" onclick="markLearned()">✓ Mark Today as Learned</button>
+      <label>What I learned today about AI</label>
+      <textarea id="aiNotes" rows="3" placeholder="e.g. I learned about fine-tuning vs RAG..."></textarea>
+      <button class="btn btn-outline btn-sm" onclick="saveAINotes()">Save Notes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROSTER -->
+<div class="section" id="roster">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <div class="section-title">Roster & Schedule</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title">📋 Roster Upload</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:12px">Upload your monthly roster screenshot for reference</div>
+      <input type="file" id="rosterUploadInput" accept="image/*" style="display:none" onchange="uploadRoster(this)">
+      <button class="btn btn-gold" onclick="document.getElementById('rosterUploadInput').click()">📤 Upload Roster Image</button>
+      <div id="rosterImageWrap" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">➕ Add Flight</div>
+      <div class="grid2" style="gap:8px">
+        <div><label>Date</label><input type="date" id="flightDate"></div>
+        <div><label>Route (e.g. DXB-BKK)</label><input type="text" id="flightRoute" placeholder="DXB-BKK"></div>
+        <div><label>Departure time</label><input type="time" id="flightDep"></div>
+        <div><label>Arrival time local</label><input type="time" id="flightArr"></div>
+        <div><label>Destination City</label>
+          <select id="flightCity">
+            <option value="">Select...</option>
+            <option>Bangkok</option><option>Ho Chi Minh City</option><option>Rome</option>
+            <option>Amsterdam</option><option>London</option><option>Beijing</option>
+            <option>Dallas</option><option>Miami</option><option>Houston</option>
+            <option>Stockholm</option><option>Prague</option><option>Phuket</option><option>Christchurch</option>
+          </select>
+        </div>
+        <div><label>Layover (hours)</label><input type="number" id="flightLayover" placeholder="24"></div>
+      </div>
+      <button class="btn btn-gold" style="width:100%;margin-top:8px" onclick="addFlight()">Add to Schedule</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">✈️ Flight Log</div>
+    <div id="flightLog"><div style="color:var(--muted);font-size:13px">No flights logged yet.</div></div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<script>
+const $=id=>document.getElementById(id);
+function toast(msg,dur=3000){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
+function ls(k,v){if(v===undefined){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}localStorage.setItem(k,JSON.stringify(v))}
+function dubaiNow(){const now=new Date();return new Date(now.getTime()+(4*60+now.getTimezoneOffset())*60000)}
+function todayStr(){const d=dubaiNow();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+
+// CLOCK
+function updateClock(){
+  const d=dubaiNow();
+  $('clock').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
+  $('dateLine').textContent=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+
+// WEATHER
+function loadWeather(){
+  fetch('https://wttr.in/Dubai?format=3').then(r=>r.text()).then(t=>{
+    $('weatherMain').textContent=t.trim()||'☀️ Dubai, UAE';
+    $('weatherSub').textContent='Live weather';
+  }).catch(()=>{$('weatherMain').textContent='☀️ Dubai';$('weatherSub').textContent='Weather unavailable'});
+}
+
+// PHILOSOPHY
+const PHILOSOPHERS=[
+  {name:'Marcus Aurelius',era:'Roman Emperor & Stoic · 121–180 AD',emoji:'🏛️',quote:'"You have power over your mind — not outside events. Realize this, and you will find strength."',lesson:'Stoicism teaches us that suffering comes not from events but from our judgments about them. Notice one thing that upset you today — and question if you can control it. If not, release it.',day:'Monday'},
+  {name:'Epictetus',era:'Stoic Philosopher · 50–135 AD',emoji:'📜',quote:'"Make the best use of what is in your power, and take the rest as it happens."',lesson:'Epictetus was born a slave and became one of history\'s greatest teachers. Freedom is not a circumstance — it is a practice. Own your choices fully today.',day:'Tuesday'},
+  {name:'Simone de Beauvoir',era:'Existentialist & Feminist · 1908–1986',emoji:'✍️',quote:'"One is not born, but rather becomes, a woman."',lesson:'De Beauvoir challenged every role society assigns to women. Being a strong, independent, professional woman IS a radical act. You are authoring your own becoming.',day:'Wednesday'},
+  {name:'Albert Camus',era:'Absurdist Philosopher · 1913–1960',emoji:'🌊',quote:'"In the depth of winter, I finally learned that within me there lay an invincible summer."',lesson:'The absurd is that life has no pre-made meaning — and that is liberating. Camus says: rebel against meaninglessness through joy, passion, and presence.',day:'Thursday'},
+  {name:'Friedrich Nietzsche',era:'German Philosopher · 1844–1900',emoji:'⚡',quote:'"That which does not kill us, makes us stronger."',lesson:'Nietzsche challenges you to become who you truly are — not what others expect. The discipline you build every day: this is your will to power in action.',day:'Friday'},
+  {name:'Socrates',era:'Father of Western Philosophy · 470–399 BC',emoji:'🦉',quote:'"An unexamined life is not worth living."',lesson:'Socrates never wrote a word — he lived philosophy in every conversation. This dashboard, these reflections: you ARE doing philosophy. Keep examining.',day:'Saturday'},
+  {name:'Frida Kahlo',era:'Artist & Philosopher of Pain · 1907–1954',emoji:'🌺',quote:'"I am my own muse. I am the subject I know best."',lesson:'Frida turned suffering into transcendent beauty. Your story, your body, your pain, your joy — all of it is sacred material for the masterpiece that is your life.',day:'Sunday'},
+];
+
+function initPhilosophy(){
+  const dow=dubaiNow().getDay();
+  const idx=[6,0,1,2,3,4,5][dow];
+  const p=PHILOSOPHERS[idx];
+  $('philDay').textContent='· '+p.day;
+  $('philEmoji').textContent=p.emoji;
+  $('philName').textContent=p.name;
+  $('philEra').textContent=p.era;
+  $('philQuote').textContent=p.quote;
+  $('philLesson').textContent=p.lesson;
+  $('philWeek').textContent='· Week '+Math.ceil(dubaiNow().getDate()/7);
+  renderPhilTopics();
+}
+
+function addPhilTopic(){
+  const v=$('philTopic').value.trim();if(!v)return;
+  const arr=ls('philTopics_'+todayStr())||[];
+  arr.push(v);ls('philTopics_'+todayStr(),arr);
+  $('philTopic').value='';renderPhilTopics();toast('Topic saved ✨');
+}
+
+function renderPhilTopics(){
+  const arr=ls('philTopics_'+todayStr())||[];
+  $('philTopicList').innerHTML=arr.map((t,i)=>'<div style="display:flex;justify-content:space-between;padding:6px 10px;background:var(--bg3);border-radius:6px;margin-bottom:4px;font-size:12px"><span>'+t+'</span><span onclick="delPhilTopic('+i+')" style="cursor:pointer;color:var(--muted)">✕</span></div>').join('');
+  $('philTopicCount').textContent=arr.length+' topics logged';
+  $('philProgressFill').style.width=Math.min(arr.length/7*100,100)+'%';
+}
+
+function delPhilTopic(i){
+  const arr=ls('philTopics_'+todayStr())||[];arr.splice(i,1);ls('philTopics_'+todayStr(),arr);renderPhilTopics();
+}
+
+// FLIGHT MODE
+const CITY_DATA={
+  'Bangkok':{offset:7,flag:'🇹🇭',restaurants:[{n:'Gaggan Anand',d:'Progressive Indian cuisine, world-renowned'},{n:'Nahm',d:'Traditional Thai by David Thompson'},{n:'Baan Ice',d:'Classic Thai in beautiful wooden house'}],activities:[{n:'Grand Palace & Wat Pho',d:'Iconic temples, a must every visit'},{n:'Chatuchak Weekend Market',d:'Massive market for shopping'},{n:'Chao Phraya River cruise',d:'Sunset cruise with skyline views'}]},
+  'Ho Chi Minh City':{offset:7,flag:'🇻🇳',restaurants:[{n:'The Deck Saigon',d:'Beautiful riverside fine dining'},{n:'Cục Gạch Quán',d:'Charming garden restaurant'},{n:'Bún bò Huế 31',d:'Best spicy beef noodle soup'}],activities:[{n:'War Remnants Museum',d:'Powerful and important history'},{n:'Ben Thanh Market',d:'Local market for souvenirs & food'},{n:'Mekong Delta day trip',d:'Boats, villages, stunning scenery'}]},
+  'Rome':{offset:1,flag:'🇮🇹',restaurants:[{n:'Da Enzo al 29',d:'Authentic Roman trattoria'},{n:'Supplì Roma',d:'Best rice balls in Trastevere'},{n:'Pizzarium Bonci',d:'World-famous pizza al taglio'}],activities:[{n:'Colosseum at sunrise',d:'Beat crowds, magical light'},{n:'Trastevere evening walk',d:'Most charming neighborhood'},{n:'Vatican Museums',d:'Sistine Chapel is unmissable'}]},
+  'Amsterdam':{offset:1,flag:'🇳🇱',restaurants:[{n:'Rijks Restaurant',d:'Dutch cuisine in Rijksmuseum'},{n:'Brouwerij t IJ',d:'Local craft beer in windmill'},{n:'Brunch Boat',d:'Floating brunch on the canals'}],activities:[{n:'Rijksmuseum & Van Gogh',d:'World-class art on one street'},{n:'Canal bike ride',d:'Most beautiful way to see city'},{n:'Jordaan neighborhood',d:'Boutiques, cafés, flower markets'}]},
+  'London':{offset:0,flag:'🇬🇧',restaurants:[{n:'Dishoom',d:'Bombay café, always worth the wait'},{n:'Sketch',d:'Artistic afternoon tea experience'},{n:'Flat Iron',d:'Best value steak in the city'}],activities:[{n:'Tate Modern',d:'Free, walk across Millennium Bridge'},{n:'Borough Market',d:'Ultimate food market Saturday morning'},{n:'Sky Garden',d:'Free rooftop panoramic views'}]},
+  'Beijing':{offset:8,flag:'🇨🇳',restaurants:[{n:'Da Dong Roast Duck',d:'Best Peking duck, world famous'},{n:'Crescent Moon',d:'Xinjiang cuisine, lamb and flatbread'},{n:'Jing Yaa Tang',d:'Modern duck in The Opposite House'}],activities:[{n:'Great Wall Mutianyu',d:'Less crowded, breathtaking views'},{n:'Temple of Heaven',d:'Stunning imperial complex'},{n:'798 Art District',d:'Galleries in former factory complex'}]},
+  'Dallas':{offset:-6,flag:'🇺🇸',restaurants:[{n:'Pecan Lodge',d:'Best BBQ brisket in Texas'},{n:'Lucia',d:'Intimate Italian, handmade pasta'},{n:'Knife Steakhouse',d:'Legendary dry-aged steaks'}],activities:[{n:'Sixth Floor Museum',d:'JFK history, deeply moving'},{n:'Deep Ellum',d:'Live music district, street art'},{n:'Reunion Tower',d:'360 views of Dallas skyline'}]},
+  'Miami':{offset:-5,flag:'🇺🇸',restaurants:[{n:'Versailles',d:'Iconic Cuban, Miami institution'},{n:'KYU',d:'Asian-inspired wood-fired grill'},{n:'Joe\'s Stone Crab',d:'Classic Miami seafood'}],activities:[{n:'Art Deco Historic District',d:'South Beach architecture walk'},{n:'Wynwood Walls',d:'World-famous street art murals'},{n:'Everglades airboat tour',d:'Unique Florida ecosystem'}]},
+  'Houston':{offset:-6,flag:'🇺🇸',restaurants:[{n:'Xin Chao',d:'Modern Vietnamese, James Beard'},{n:'Killen\'s BBQ',d:'Legendary Texas BBQ'},{n:'Brennan\'s',d:'Classic Creole in historic building'}],activities:[{n:'Space Center Houston',d:'NASA history, astronaut experiences'},{n:'Museum District',d:'Free museums on walkable strip'},{n:'Buffalo Bayou Park',d:'Urban green space, skyline views'}]},
+  'Stockholm':{offset:1,flag:'🇸🇪',restaurants:[{n:'Oaxen Krog',d:'Two Michelin stars, Nordic cuisine'},{n:'Pelikan',d:'Classic Swedish since 1904'},{n:'Fotografiska Café',d:'Waterfront views, great food'}],activities:[{n:'Gamla Stan Old Town',d:'Medieval streets, Nobel Museum'},{n:'Vasa Museum',d:'17th century warship, jaw-dropping'},{n:'ABBA The Museum',d:'Fun, nostalgic, surprisingly excellent'}]},
+  'Prague':{offset:1,flag:'🇨🇿',restaurants:[{n:'Lokál Dlouhááá',d:'Best Czech food and Pilsner'},{n:'Café Savoy',d:'Art Nouveau café, great brunch'},{n:'Eska',d:'Modern Czech, fermentation menu'}],activities:[{n:'Prague Castle at dawn',d:'Empty, golden, unforgettable'},{n:'Žižkov neighborhood',d:'Local bars, TV tower'},{n:'Charles Bridge evening',d:'Most romantic views of city'}]},
+  'Phuket':{offset:7,flag:'🇹🇭',restaurants:[{n:'Suay Restaurant',d:'Modern Thai, stunning garden'},{n:'Kan Eang@Pier',d:'Seafood on water in Chalong Bay'},{n:'Kopitiam by Wilai',d:'Authentic Phuket breakfast'}],activities:[{n:'Phi Phi Islands day trip',d:'Crystal water, snorkeling'},{n:'Big Buddha',d:'Panoramic views of island'},{n:'Old Phuket Town',d:'Colorful architecture, cafés'}]},
+  'Christchurch':{offset:12,flag:'🇳🇿',restaurants:[{n:'Hello Sunday',d:'Best brunch in South Island'},{n:'Twenty Seven Steps',d:'Canterbury lamb, beautiful courtyard'},{n:'Roots Restaurant',d:'NZ seasonal tasting menu'}],activities:[{n:'Botanic Gardens',d:'Beautiful, peaceful, free entry'},{n:'Cardboard Cathedral',d:'Iconic post-earthquake structure'},{n:'Gondola to Port Hills',d:'Stunning views over city'}]},
+};
+
+function setMode(m){
+  ls('flightMode',m);
+  $('dubaiModeBtn').classList.toggle('active',m==='dubai');
+  $('layoverModeBtn').classList.toggle('active',m==='layover');
+  $('dubaiModeContent').style.display=m==='dubai'?'':'none';
+  $('layoverModeContent').style.display=m==='layover'?'':'none';
+}
+
+function generateLayoverPlan(){
+  const city=$('layoverCity').value;
+  if(!city){toast('Please select a destination city');return;}
+  const arrival=$('layoverArrival').value;
+  const dur=parseFloat($('layoverDuration').value)||24;
+  const ret=$('layoverReturn').value;
+  const data=CITY_DATA[city];
+  if(!data){toast('City data not found');return;}
+  let tzHtml='<div><strong style="color:var(--gold)">'+data.flag+' '+city+'</strong> · GMT+'+data.offset+'</div>';
+  if(arrival){const[h,m]=arrival.split(':').map(Number);const lh=((h-4+data.offset+24)%24);tzHtml+='<div>Arrival: <strong>'+arrival+' Dubai</strong> = <strong>'+String(lh).padStart(2,'0')+':'+String(m).padStart(2,'0')+' local</strong></div>';}
+  if(ret){const[h,m]=ret.split(':').map(Number);const lh=((h-4+data.offset+24)%24);tzHtml+='<div>Return: <strong>'+ret+' Dubai</strong> = <strong>'+String(lh).padStart(2,'0')+':'+String(m).padStart(2,'0')+' local</strong></div>';}
+  tzHtml+='<div style="margin-top:6px;color:var(--muted)">Layover: <strong style="color:var(--text)">'+dur+'h</strong></div>';
+  $('layoverTimezoneInfo').innerHTML=tzHtml;
+  const jetHtml=dur>12?'<div class="pill pill-gold" style="margin-bottom:8px">ULR Flight Protocol</div><ul style="padding-left:16px;line-height:2;font-size:13px"><li>Do NOT sleep for first 4 hours on arrival</li><li>Get 20-30 min of natural sunlight</li><li>Hydrate minimum 500ml immediately</li><li>Light recovery: walk + stretching only</li><li>Target sleep: local midnight</li><li>Take magnesium before sleep</li></ul>':'<div class="pill pill-green" style="margin-bottom:8px">Normal Layover Protocol</div><ul style="padding-left:16px;line-height:2;font-size:13px"><li>20-min walk to reset circulation</li><li>Hydrate: 500ml water + electrolytes</li><li>Avoid heavy meals — protein + veg</li><li>Brief nap OK (max 90 min)</li><li>Bodyweight workout when rested</li></ul>';
+  $('jetlagContent').innerHTML='<div style="background:var(--bg3);border-radius:10px;padding:14px;margin-top:12px">'+jetHtml+'</div>';
+  let guideHtml='<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px"><div><div style="font-size:12px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🍽️ Restaurant Picks</div>';
+  data.restaurants.forEach(r=>{guideHtml+='<div style="display:flex;gap:8px;padding:8px;background:var(--bg3);border-radius:8px;margin-bottom:6px;font-size:12px;line-height:1.4"><span>🍴</span><div><strong>'+r.n+'</strong><br><span style="color:var(--muted)">'+r.d+'</span></div></div>';});
+  guideHtml+='</div><div><div style="font-size:12px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">🗺️ Top Activities</div>';
+  data.activities.forEach(a=>{guideHtml+='<div style="display:flex;gap:8px;padding:8px;background:var(--bg3);border-radius:8px;margin-bottom:6px;font-size:12px;line-height:1.4"><span>📍</span><div><strong>'+a.n+'</strong><br><span style="color:var(--muted)">'+a.d+'</span></div></div>';});
+  guideHtml+='</div></div>';
+  $('cityGuideTitle').textContent=data.flag+' City Guide — '+city;
+  $('cityGuideContent').innerHTML=guideHtml;
+  $('layoverPlanContent').style.display='';
+  $('cityGuideWrap').style.display='';
+  toast('Layover plan for '+city+' generated! ✈️');
+}
+
+// APPOINTMENTS
+function addAppointment(){
+  const name=$('apptName').value.trim();
+  const time=$('apptTime').value;
+  if(!name||!time){toast('Please fill name and time');return;}
+  const arr=ls('appointments')||[];
+  arr.push({id:Date.now(),name,time,date:$('apptDate').value,recurring:$('apptRecurring').value});
+  ls('appointments',arr);
+  $('apptName').value='';$('apptTime').value='';$('apptDate').value='';
+  renderAppointments();toast('Appointment added ✅');
+}
+
+function spConvert(dubaiTime){
+  const[h,m]=dubaiTime.split(':').map(Number);
+  const lh=((h-4-3+48)%24);
+  return String(lh).padStart(2,'0')+':'+String(m).padStart(2,'0');
+}
+
+function renderAppointments(){
+  const arr=ls('appointments')||[];
+  if(!arr.length){$('apptList').innerHTML='<div style="color:var(--muted);font-size:13px">No appointments yet. Add one on the left.</div>';return;}
+  $('apptList').innerHTML=arr.map(a=>'<div class="appt-card"><div style="display:flex;align-items:center;justify-content:space-between"><div class="appt-name">'+a.name+(a.recurring!=='no'?'<span class="pill pill-gold" style="margin-left:6px">'+a.recurring+'</span>':'')+'</div><button style="background:none;border:none;color:var(--muted);cursor:pointer" onclick="delAppt('+a.id+')">✕</button></div><div class="appt-times" style="margin-top:6px">🕌 <span>'+a.time+'</span> Dubai &nbsp;|&nbsp; 🇧🇷 <span>'+spConvert(a.time)+'</span> São Paulo</div>'+(a.date?'<div style="font-size:11px;color:var(--muted);margin-top:4px">📅 '+a.date+'</div>':'')+'</div>').join('');
+}
+
+function delAppt(id){ls('appointments',(ls('appointments')||[]).filter(a=>a.id!==id));renderAppointments();toast('Removed');}
+
+// MEALS
+function addMeal(){
+  const name=$('mealName').value.trim();
+  const cal=parseInt($('mealCal').value)||0;
+  const prot=parseInt($('mealProtein').value)||0;
+  if(!name)return;
+  const arr=ls('meals_'+todayStr())||[];
+  arr.push({id:Date.now(),name,cal,prot});
+  ls('meals_'+todayStr(),arr);
+  $('mealName').value='';$('mealCal').value='';$('mealProtein').value='';
+  renderMeals();
+}
+
+function delMeal(id){ls('meals_'+todayStr(),(ls('meals_'+todayStr())||[]).filter(m=>m.id!==id));renderMeals();}
+
+function renderMeals(){
+  const arr=ls('meals_'+todayStr())||[];
+  $('mealList').innerHTML=arr.map(m=>'<div class="meal-item"><span>'+m.name+'</span><span style="color:var(--muted);font-size:12px">'+m.prot+'g prot · '+m.cal+' kcal</span><button class="meal-del" onclick="delMeal('+m.id+')">✕</button></div>').join('');
+  const totCal=arr.reduce((s,m)=>s+m.cal,0);
+  const totProt=arr.reduce((s,m)=>s+m.prot,0);
+  $('calTotal').textContent=totCal;
+  $('protTotal').textContent=totProt;
+  $('calBar').style.width=Math.min(totCal/1700*100,100)+'%';
+  $('protBar').style.width=Math.min(totProt/120*100,100)+'%';
+}
+
+// SLEEP
+let sleepQuality=0;
+function setSleepQuality(q){
+  sleepQuality=q;ls('sleepQuality_'+todayStr(),q);
+  const stars=$('sleepStars').querySelectorAll('span');
+  stars.forEach((s,i)=>s.style.opacity=i<q?'1':'0.4');
+  const tips=['','😴 Poor sleep — prioritize rest today. Skip gym, focus on recovery.','😓 Below average — light movement only. Drink extra water.','😊 Decent sleep — you can train but listen to your body.','💪 Good sleep — go for it today!','🌟 Perfect sleep — maximum performance day!'];
+  $('sleepTip').textContent=tips[q]||'';
+}
+
+function saveSleep(){ls('sleepHours_'+todayStr(),$('sleepHours').value);}
+
+// WEIGHT
+function updateWeight(){
+  const w=parseFloat($('weightInput').value)||62;
+  ls('weight_'+todayStr(),w);
+  const pct=Math.max(0,Math.min(100,(62-w)/(62-59)*100));
+  $('weightBar').style.width=pct+'%';
+  $('weightCurrent').textContent=w+' kg current';
+}
+
+// PHOTOS
+function uploadPhoto(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const photos=ls('photos')||[];
+    photos.push({src:e.target.result,date:todayStr()});
+    ls('photos',photos);renderPhotos();toast('Photo saved 📸');
+  };
+  reader.readAsDataURL(file);input.value='';
+}
+
+function renderPhotos(){
+  const photos=ls('photos')||[];
+  $('photoGrid').innerHTML=photos.slice(-6).map(p=>'<div style="position:relative;width:80px;height:100px;border-radius:8px;overflow:hidden;border:1px solid var(--border)"><img src="'+p.src+'" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.7);font-size:9px;color:#fff;padding:2px 4px;text-align:center">'+p.date+'</div></div>').join('');
+  const last=photos.length?photos[photos.length-1].date:'Never';
+  if(last!=='Never'){
+    const d=new Date(last);d.setDate(d.getDate()+15);
+    $('photoReminder').textContent='Next check-in: '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }
+}
+
+// FINANCE
+function updateSalary(){
+  const v=parseFloat($('variableIncome').value)||0;
+  ls('variableIncome',v);
+  $('totalSalary').textContent='AED '+(10795+v).toLocaleString();
+}
+
+function updateEmergency(){
+  const amt=parseFloat($('emergencyAmt').value)||0;
+  ls('emergencyAmt',amt);
+  $('emergencyBar').style.width=Math.min(amt/15000*100,100)+'%';
+  $('emergencyLabel').textContent='AED '+amt.toLocaleString()+' saved';
+}
+
+function renderPayments(){
+  const payments=[
+    {name:'Condominium (Quarterly)',amount:'AED 11,555',due:'May 17, 2026',alert:true},
+    {name:'ADCB Loan',amount:'AED 3,638',due:'Monthly · auto-deducted',alert:false},
+    {name:'DIB Mortgage',amount:'AED 2,984',due:'Monthly',alert:false},
+    {name:'DEWA',amount:'~AED 378',due:'Monthly · day 9',alert:false},
+    {name:'DU (phone)',amount:'~AED 357',due:'Monthly · day 13',alert:false},
+  ];
+  $('paymentList').innerHTML=payments.map(p=>'<div class="payment-card '+(p.alert?'alert':'')+'"><div><div style="font-weight:500;font-size:13px">'+p.name+'</div><div style="font-size:11px;color:var(--muted)">'+p.due+'</div></div><div style="color:var(--gold);font-weight:600;font-size:14px">'+p.amount+'</div></div>').join('');
+}
+
+// CHECKLIST
+const CHECKLIST_ITEMS=[
+  {id:'water',icon:'💧',label:'Drink 2.5L water'},
+  {id:'protein',icon:'🥩',label:'Protein in every meal'},
+  {id:'move',icon:'🏃',label:'15 min movement minimum'},
+  {id:'log',icon:'📝',label:'Log all meals'},
+  {id:'sleep',icon:'🌙',label:'Sleep before midnight'},
+  {id:'nodelivery',icon:'🛵',label:'Stay within delivery budget'},
+  {id:'philosophy',icon:'📚',label:'One philosophy reading today'},
+];
+
+const SUPPLEMENTS=['Omega-3','Magnesium','Vitamin D','Inositol'];
+
+function initChecklist(){
+  const saved=ls('checklist_'+todayStr())||{};
+  $('checklistItems').innerHTML=CHECKLIST_ITEMS.map(it=>'<div class="check-item '+(saved[it.id]?'done':'')+'" onclick="toggleCheck(\''+it.id+'\')"><input type="checkbox" '+(saved[it.id]?'checked':'')+' onclick="event.stopPropagation()"><span style="flex:1;font-size:13px">'+it.icon+' '+it.label+'</span></div>').join('');
+  const supSaved=ls('supplements_'+todayStr())||{};
+  $('supplementList').innerHTML=SUPPLEMENTS.map(s=>'<div class="check-item '+(supSaved[s]?'done':'')+'" onclick="toggleSup(\''+s+'\')"><input type="checkbox" '+(supSaved[s]?'checked':'')+' onclick="event.stopPropagation()"><span style="flex:1;font-size:13px">💊 '+s+'</span></div>').join('');
+  initWater();renderDelivery();
+}
+
+function toggleCheck(id){
+  const saved=ls('checklist_'+todayStr())||{};saved[id]=!saved[id];ls('checklist_'+todayStr(),saved);
+  const el=document.querySelector('#checklistItems .check-item:nth-child('+(CHECKLIST_ITEMS.findIndex(i=>i.id===id)+1)+')');
+  if(el){el.classList.toggle('done',saved[id]);el.querySelector('input').checked=saved[id];}
+}
+
+function toggleSup(s){
+  const saved=ls('supplements_'+todayStr())||{};saved[s]=!saved[s];ls('supplements_'+todayStr(),saved);
+  initChecklist();
+}
+
+function initWater(){
+  const count=ls('water_'+todayStr())||0;
+  $('waterGlasses').innerHTML=Array.from({length:5},(_,i)=>'<div><div class="glass '+(i<count?'filled':'')+'" onclick="toggleWater('+i+')"></div><div style="text-align:center;font-size:10px;color:var(--muted);margin-top:4px">500ml</div></div>').join('');
+  $('waterCount').textContent=count;$('waterML').textContent=count*500;
+}
+
+function toggleWater(i){
+  const count=ls('water_'+todayStr())||0;
+  const nc=i<count?i:i+1;ls('water_'+todayStr(),nc);initWater();
+}
+
+function addDelivery(){
+  const amt=parseFloat($('deliveryAdd').value)||0;if(!amt)return;
+  const key='delivery_'+todayStr().slice(0,7);
+  ls(key,(ls(key)||0)+amt);$('deliveryAdd').value='';renderDelivery();
+}
+
+function renderDelivery(){
+  const total=ls('delivery_'+todayStr().slice(0,7))||0;
+  const over=total>400;
+  $('deliveryStatus').innerHTML='<div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--bg3);border-radius:8px"><span>Month total</span><span style="color:'+(over?'var(--red)':'var(--green)')+'"><strong>AED '+total.toFixed(0)+'</strong> / 400</span></div>'+(over?'<div style="color:var(--red);font-size:12px;margin-top:6px">⚠️ Over monthly delivery budget!</div>':'');
+}
+
+// AI NEWS
+const RSS_FEEDS={
+  mit:'https://api.rss2json.com/v1/api.json?rss_url=https://www.technologyreview.com/feed/',
+  verge:'https://api.rss2json.com/v1/api.json?rss_url=https://www.theverge.com/ai-artificial-intelligence/rss/index.xml',
+  hf:'https://api.rss2json.com/v1/api.json?rss_url=https://huggingface.co/blog/feed.xml',
+};
+let currentFeed='mit';
+
+async function loadNews(feed){
+  if(feed)currentFeed=feed;
+  $('newsFeed').innerHTML='<div style="color:var(--muted)">Loading...</div>';
+  try{
+    const r=await fetch(RSS_FEEDS[currentFeed]);const d=await r.json();
+    const items=(d.items||[]).slice(0,5);
+    if(!items.length){$('newsFeed').innerHTML='<div style="color:var(--muted)">No articles found.</div>';return;}
+    $('newsFeed').innerHTML=items.map(it=>'<div class="news-item"><div class="news-source">'+(it.author||feed||'AI News')+'</div><div class="news-title"><a href="'+it.link+'" target="_blank">'+it.title+'</a></div><div class="news-date">'+new Date(it.pubDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+'</div></div>').join('');
+  }catch(e){$('newsFeed').innerHTML='<div style="color:var(--muted)">Could not load feed. Check connection.</div>';}
+}
+
+function switchNewsTab(feed,el){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');currentFeed=feed;loadNews(feed);
+}
+
+const AOD=[
+  {title:'Practical Deep Learning for Coders',source:'fast.ai',url:'https://course.fast.ai'},
+  {title:'ChatGPT Prompt Engineering for Developers',source:'DeepLearning.AI',url:'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/'},
+  {title:'Anthropic Research Overview',source:'Anthropic',url:'https://www.anthropic.com/research'},
+  {title:'The Illustrated Transformer',source:'Jay Alammar',url:'https://jalammar.github.io/illustrated-transformer/'},
+  {title:'HuggingFace NLP Course',source:'Hugging Face',url:'https://huggingface.co/learn/nlp-course/chapter1/1'},
+  {title:'AI Safety Fundamentals',source:'BlueDot Impact',url:'https://aisafetyfundamentals.com/'},
+  {title:'Elements of AI',source:'University of Helsinki',url:'https://www.elementsofai.com/'},
+];
+
+function initAOD(){const art=AOD[dubaiNow().getDate()%AOD.length];$('aodTitle').textContent=art.title;$('aodSource').textContent='Source: '+art.source;$('aodLink').href=art.url;}
+
+function markLearned(){
+  const today=todayStr();const last=ls('streakLast');
+  const yesterday=new Date(dubaiNow());yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.getFullYear()+'-'+String(yesterday.getMonth()+1).padStart(2,'0')+'-'+String(yesterday.getDate()).padStart(2,'0');
+  let streak=ls('streak')||0;
+  if(last===today){toast('Already marked today!');return;}
+  if(last===yStr)streak++;else streak=1;
+  ls('streak',streak);ls('streakLast',today);renderStreak();toast('Day '+streak+' streak! 🔥');
+}
+
+function renderStreak(){
+  const streak=ls('streak')||0;const last=ls('streakLast')||'Never';
+  $('streakNum').textContent=streak;
+  $('streakDate').textContent=last==='Never'?'Start today!':'Last logged: '+last;
+}
+
+function saveAINotes(){ls('aiNotes_'+todayStr(),$('aiNotes').value);toast('Notes saved');}
+
+// ROSTER
+function addFlight(){
+  const date=$('flightDate').value;const route=$('flightRoute').value.trim();
+  if(!date||!route){toast('Please fill date and route');return;}
+  const flights=ls('flights')||[];
+  flights.push({id:Date.now(),date,route,dep:$('flightDep').value,arr:$('flightArr').value,city:$('flightCity').value,lay:parseFloat($('flightLayover').value)||0});
+  ls('flights',flights);renderFlightLog();toast('Flight added ✈️');
+}
+
+function renderFlightLog(){
+  const flights=ls('flights')||[];
+  if(!flights.length){$('flightLog').innerHTML='<div style="color:var(--muted);font-size:13px">No flights logged yet.</div>';return;}
+  $('flightLog').innerHTML=flights.slice().reverse().map(f=>'<div style="background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;color:var(--gold)">'+f.route+'</div><div style="font-size:12px;color:var(--muted)">'+f.date+' · '+f.city+' · '+f.lay+'h layover</div></div><button style="background:none;border:none;color:var(--muted);cursor:pointer" onclick="delFlight('+f.id+')">✕</button></div>').join('');
+}
+
+function delFlight(id){ls('flights',(ls('flights')||[]).filter(f=>f.id!==id));renderFlightLog();}
+
+function uploadRoster(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{$('rosterImageWrap').innerHTML='<img src="'+e.target.result+'" style="width:100%;border-radius:8px;margin-top:8px" alt="Roster">';ls('rosterImage',e.target.result);toast('Roster uploaded 📋');};
+  reader.readAsDataURL(file);input.value='';
+}
+
+function saveWorkoutNotes(){ls('workoutNotes_'+todayStr(),$('workoutNotes').value);toast('Notes saved');}
+
+// EASTER EGG
+let catCount=0;
+function catEgg(){catCount++;const msgs=['🐱 Miau!','🐱🐱 Two cats, one queen!','😻 Gatinhas fofas!','🐾 Your cats say: go crush today!'];toast(msgs[catCount%msgs.length]);}
+
+// RESTORE
+function restoreState(){
+  const vi=ls('variableIncome');if(vi)$('variableIncome').value=vi;updateSalary();
+  const ea=ls('emergencyAmt');if(ea){$('emergencyAmt').value=ea;updateEmergency();}
+  const w=ls('weight_'+todayStr());if(w){$('weightInput').value=w;updateWeight();}
+  const sh=ls('sleepHours_'+todayStr());if(sh)$('sleepHours').value=sh;
+  const sq=ls('sleepQuality_'+todayStr());if(sq)setSleepQuality(sq);
+  const wn=ls('workoutNotes_'+todayStr());if(wn)$('workoutNotes').value=wn;
+  const ain=ls('aiNotes_'+todayStr());if(ain)$('aiNotes').value=ain;
+  const ri=ls('rosterImage');if(ri)$('rosterImageWrap').innerHTML='<img src="'+ri+'" style="width:100%;border-radius:8px" alt="Roster">';
+  const mode=ls('flightMode')||'dubai';setMode(mode);
+  renderPhotos();renderFlightLog();renderStreak();
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded',function(){
+  updateClock();
+  setInterval(updateClock,1000);
+  loadWeather();
+  setInterval(loadWeather,600000);
+  initPhilosophy();
+  initChecklist();
+  renderMeals();
+  renderAppointments();
+  renderPayments();
+  initAOD();
+  loadNews();
+  restoreState();
+});
+</script>
+</body>
+</html>
